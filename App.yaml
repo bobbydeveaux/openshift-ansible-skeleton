@@ -1,0 +1,26 @@
+---
+- name: Deploy Thing
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  vars:
+    local_database_envs: ["dev", "int", "int-hscn", "sandboxlocal"]
+    pgadmin_envs: ["beta", "prod"]
+    kube_resource_configmaps:
+      service1: "{{ lookup('template', 'roles/service1/templates/configmaps/configmap.yml') | from_yaml }}"
+    kube_resource_deploymentconfigs:
+      service1: "{{ lookup('template', 'roles/service1/templates/deploymentconfigs/deployment_config.yaml') | from_yaml }}"
+      
+  # Include Ansible Kubernetes and OpenShift modules
+  roles:
+    ## All Services here
+    - {role: 'service1', tags: 'service1'}
+    #- {role: 'service2', tags: 'service2'}
+
+
+    ## Now run deploy of config maps aand deployment configs to stop dependecny circle
+    - {role: 'deploy', tags: 'configmaps'}
+
+  vars_files: []
+  environment:
+

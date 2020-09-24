@@ -1,0 +1,19 @@
+---
+# tasks file for roles/biobank
+
+- name: Create ImageStreams 
+  k8s:
+    state: '{{ state }}'
+    force: '{{ force_deploy }}'
+    definition: "{{ lookup('template', 'imagestreams/images-stream.yaml') }}"
+
+- name: Create Service for Biobank-Illumina microservice
+  k8s:
+    state: '{{ state }}'
+    force: '{{ force_deploy }}'
+    definition: "{{ lookup('template', 'services/service.yaml') }}"
+
+- name: Create Storage
+  k8s:
+    state: present
+    definition: "{{ lookup('template', 'storage/storage.yml') }}"

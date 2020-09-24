@@ -1,0 +1,17 @@
+
+---
+- name: create configmaps
+  k8s:
+    definition: "{{ item.value }}"
+    append_hash: yes
+  loop: "{{ kube_resource_configmaps | dict2items }}"
+
+- set_fact:
+    service1: "{{ kube_resource_configmaps.service1 | k8s_config_resource_name }}"
+    
+
+- name: create deployment configs
+  k8s:
+    definition: "{{ item.value }}"
+    append_hash: yes
+  loop: "{{ kube_resource_deploymentconfigs | dict2items }}"

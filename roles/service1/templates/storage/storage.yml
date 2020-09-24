@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: '{{ namespace }}'
+  annotations:
+    volume.beta.kubernetes.io/storage-class: tier2
+  name: service1-storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

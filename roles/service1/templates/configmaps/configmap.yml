@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+data:
+  SOME_VAR: '{{ some_var }}'
+metadata:
+  namespace: '{{ namespace }}'
+  name: service1
+kind: ConfigMap

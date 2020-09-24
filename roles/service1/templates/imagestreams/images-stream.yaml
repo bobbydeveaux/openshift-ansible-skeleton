@@ -1,0 +1,7 @@
+---
+# ImageStream
+kind: ImageStream
+apiVersion: v1
+metadata:
+  name: service1
+  namespace: '{{ namespace }}'

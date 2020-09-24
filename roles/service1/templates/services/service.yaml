@@ -1,0 +1,16 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: service1
+  namespace: '{{ namespace }}'
+  labels:
+    iac.version: '{{ iac_version}}'
+    app: service1
+spec:
+  ports:
+  - name: service1-8080
+    port: 8080
+  selector:
+    deploymentconfig: service1
+

@@ -1,0 +1,56 @@
+---
+kind: DeploymentConfig
+apiVersion: v1
+metadata:
+  name: service1
+  namespace: '{{ namespace }}'
+  labels:
+    iac.version: '{{ iac_version }}'
+    app: service1
+spec:
+  template:
+    metadata:
+      labels:
+        iac.version: '{{ iac_version }}'
+        deploymentconfig: service1
+        app: service1
+    spec:
+      nodeSelector:
+        network: 'internet'
+      containers:
+        - name: service1
+          image: service1
+          resources:
+            requests:
+              memory: "{{ generic_data_nodememory }}"
+              cpu: "{{ generic_data_cpus }}"
+            limits:
+              memory: "{{ generic_data_max_nodememory }}"
+              cpu: "{{ generic_data_max_cpus }}"
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: EXTRA_ENV
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+          envFrom:
+            - configMapRef:
+                name: '{{ service1_config }}'
+  replicas: 2
+  selector:
+    deploymentconfig: service1
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - service1
+        from:
+          kind: ImageStreamTag
+          name: service1:latest
+  strategy:
+    type: Rolling
